@@ -4,7 +4,10 @@ import type { Tag } from "@/types/tag";
 import { Collection } from '@/types/collection';
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge";
+import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import TagChip from '@/components/common/TagChip';
 
@@ -94,7 +97,52 @@ function page() {
                 </div>
                 <Card className="p-4 flex flex-col border-border lg:flex-row border">
                     <Input placeholder="Search collections..." value={search} onChange={(e) => setSearch(e.target.value)} />
-                    <Button className="bg-amber-500 text-white hover:bg-amber-600 font-semibold">+ New Collection</Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="bg-amber-500 text-white hover:bg-amber-600 font-semibold">
+                                + New Collection
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[520px]">
+                            <DialogHeader>
+                                <DialogTitle className="text-xl font-bold text-[#404040]">
+                                    Create New Collections
+                                </DialogTitle>
+                                <DialogDescription className="text-sm text-muted-foreground">
+                                    Add a new prompt to your collection.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-2">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="collection-title">Collection Title</Label>
+                                    <Input
+                                        id="collection-title"
+                                        placeholder="e.g. World Class Ad Copywriter"
+                                        className="border-[#E5E5E5]"
+                                    />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="collection-description">Description</Label>
+                                    <textarea
+                                        id="collection-description"
+                                        placeholder="Enter your collection description here..."
+                                        className="min-h-20 rounded-md border border-[#E5E5E5] p-2 text-sm"
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline" className="border-[#E5E5E5]">
+                                        Cancel
+                                    </Button>
+                                </DialogClose>
+
+                                <Button type="submit" className="bg-amber-500 text-white hover:bg-amber-600 font-semibold">
+                                    + New Collection
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </Card>
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 mt-6">
                     {filteredCollections.map((collection) => (
@@ -148,8 +196,65 @@ function page() {
                                 </button>
 
                                 <div className="flex gap-2 text-muted-foreground">
-                                    <button className="hover:text-amber-500">Rename</button>
-                                    <button className="hover:text-red-500">Delete</button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <button className="hover:text-amber-500">Rename</button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[520px]">
+                                            <DialogHeader>
+                                                <DialogTitle className="text-xl font-bold text-[#404040]">
+                                                    Edit....
+                                                </DialogTitle>
+                                                <DialogDescription className="text-sm text-muted-foreground">
+                                                    Edit your collection.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className="grid gap-4 py-2">
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="collection-title">Collection Title</Label>
+                                                    <Input
+                                                        id="collection-title"
+                                                        placeholder="e.g. World Class Ad Copywriter"
+                                                        className="border-[#E5E5E5]"
+                                                    />
+                                                </div>
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor="collection-description">Description</Label>
+                                                    <textarea
+                                                        id="collection-description"
+                                                        placeholder="Enter your collection description here..."
+                                                        className="min-h-20 rounded-md border border-[#E5E5E5] p-2 text-sm"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline" className="border-[#E5E5E5]">
+                                                        Cancel
+                                                    </Button>
+                                                </DialogClose>
+                                                <Button type="submit" className="bg-amber-500 text-white hover:bg-amber-600 font-semibold">
+                                                    Save
+                                                </Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                    {/* <button className="hover:text-red-500">Delete</button> */}
+                                    <AlertDialog>
+                                        <AlertDialogTrigger className="text-red-500 hover:text-red-600">Delete</AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Delete .... Collection?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    This action cannot be undone and will permanently delete your collection
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction className="bg-red-500 text-white hover:bg-red-600">Delete</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </div>
                             </CardFooter>
                         </Card>

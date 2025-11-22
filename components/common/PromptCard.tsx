@@ -20,21 +20,21 @@ export default function PromptCard({ title, description, tags }: PromptCardProps
           <button
             type="button"
             title="Copy"
-            className="hover:text-amber-500 transition"
+            className="hover:text-amber-600 transition"
           >
             <Copy className="w-4 h-4" />
           </button>
           <button
             type="button"
             title="Edit"
-            className="hover:text-amber-500 transition"
+            className="hover:text-amber-400 transition"
           >
             <Pencil className="w-4 h-4" />
           </button>
           <button
             type="button"
             title="Delete"
-            className="hover:text-amber-500 transition"
+            className="hover:text-red-500 transition"
           >
             <Trash2 className="w-4 h-4" />
           </button>

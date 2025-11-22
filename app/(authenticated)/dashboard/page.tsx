@@ -2,9 +2,10 @@ import React from 'react'
 
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
-import { SelectValue } from '@radix-ui/react-select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import PromptCard from '@/components/common/PromptCard'
 import { Prompt } from '@/types/prompt'
 
@@ -51,12 +52,12 @@ function page() {
                 <Card className="p-4 flex flex-col border-border lg:flex-row border">
                     <Input placeholder="Search prompts..." className="" />
                     <div className="flex flex-col w-full gap-3 justify-end md:flex-row">
-                        <Select defaultValue="all-category">
+                        <Select defaultValue="all-collections">
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Category: All" />
+                                <SelectValue placeholder="Collections: All" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all-category">Category: All</SelectItem>
+                                <SelectItem value="all-collections">Collections: All</SelectItem>
                                 <SelectItem value="marketing">Marketing</SelectItem>
                                 <SelectItem value="coding">Coding</SelectItem>
                             </SelectContent>
@@ -84,8 +85,85 @@ function page() {
                                 </SelectItem>
                             </SelectContent>
                         </Select>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button className="bg-amber-500 text-white hover:bg-amber-600 font-semibold">
+                                    + Create Prompt
+                                </Button>
+                            </DialogTrigger>
 
-                        <Button className="bg-amber-500 text-white hover:bg-amber-600 font-semibold">+ Create Prompt</Button>
+                            <DialogContent className="sm:max-w-[520px]">
+                                <DialogHeader>
+                                    <DialogTitle className="text-xl font-bold text-[#404040]">
+                                        Create New Prompt
+                                    </DialogTitle>
+                                    <DialogDescription className="text-sm text-muted-foreground">
+                                        Add a new prompt to your collection.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-2">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="prompt-title">Prompt Title</Label>
+                                        <Input
+                                            id="prompt-title"
+                                            placeholder="e.g. World Class Ad Copywriter"
+                                            className="border-[#E5E5E5]"
+                                        />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="prompt-description">Description</Label>
+                                        <Input
+                                            id="prompt-description"
+                                            placeholder="Describe what this prompt does..."
+                                            className="border-[#E5E5E5]"
+                                        />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="prompt">Prompt</Label>
+                                        <textarea
+                                            id="prompt"
+                                            placeholder="Enter your prompt here..."
+                                            className="min-h-20 rounded-md border border-[#E5E5E5] p-2 text-sm"
+                                        ></textarea>
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="tags">Tags</Label>
+                                        <Input
+                                            id="tags"
+                                            placeholder="e.g. Google Ads, SEO, JavaScript"
+                                            className="border-[#E5E5E5]"
+                                        />
+                                        <p className="text-xs text-muted-foreground">
+                                            Separate tags with commas. (optional)
+                                        </p>
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label>Category</Label>
+                                        <Select>
+                                            <SelectTrigger className="border-[#E5E5E5] w-full">
+                                                <SelectValue placeholder="Select Collection" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="marketing">Marketing</SelectItem>
+                                                <SelectItem value="coding">Coding</SelectItem>
+                                                <SelectItem value="design">Design</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button variant="outline" className="border-[#E5E5E5]">
+                                            Cancel
+                                        </Button>
+                                    </DialogClose>
+
+                                    <Button type="submit" className="bg-amber-500 text-white hover:bg-amber-600 font-semibold">
+                                        Save Prompt
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </div>
                 </Card>
 
