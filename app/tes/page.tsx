@@ -407,7 +407,7 @@ export default function PromptDashboardPage() {
               className="flex-1 min-w-[200px]"
             />
 
-            <div className="flex flex-wrap gap-3 justify-end">
+            <div className="flex md:flex-wrap gap-3 justify-end">
               <Select defaultValue="all-category">
                 <SelectTrigger className="w-[170px]">
                   <SelectValue placeholder="Category: All" />

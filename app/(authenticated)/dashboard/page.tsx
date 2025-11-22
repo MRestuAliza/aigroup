@@ -1,5 +1,5 @@
 import React from 'react'
-import { DashboardNavbar } from '@/components/dashboard/dashboard-navbar'
+
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
@@ -42,17 +42,17 @@ const samplePrompts: Prompt[] = [
 function page() {
     return (
         <div>
-            <DashboardNavbar />
-            <main className="p-5 mx-auto max-w-360">
+
+            <main className="">
                 <div className="mb-4">
                     <h1 className="text-3xl font-bold">My Prompts</h1>
                     <p className="text-base text-muted-foreground">Manage your prompts here.</p>
                 </div>
-                <Card className="p-4 flex flex-col md:flex-row border border-border">
+                <Card className="p-4 flex flex-col border-border lg:flex-row border">
                     <Input placeholder="Search prompts..." className="" />
-                    <div className="flex gap-3 justify-end">
+                    <div className="flex flex-col w-full gap-3 justify-end md:flex-row">
                         <Select defaultValue="all-category">
-                            <SelectTrigger className="w-[170px]">
+                            <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Category: All" />
                             </SelectTrigger>
                             <SelectContent>
@@ -63,7 +63,7 @@ function page() {
                         </Select>
 
                         <Select defaultValue="all-tags">
-                            <SelectTrigger className="w-[140px]">
+                            <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Tags: All" />
                             </SelectTrigger>
                             <SelectContent>
@@ -72,7 +72,7 @@ function page() {
                         </Select>
 
                         <Select defaultValue="created-desc">
-                            <SelectTrigger className="w-[210px]">
+                            <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Created Time (Newest)" />
                             </SelectTrigger>
                             <SelectContent>

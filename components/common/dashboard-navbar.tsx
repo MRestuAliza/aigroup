@@ -40,9 +40,8 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "My Groups", href: "/dashboard" },
-  { label: "Explore", href: "/explore" },
-  { label: "Templates", href: "/templates" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Collections", href: "/collections" },
 ];
 
 export function DashboardNavbar() {
@@ -153,11 +152,6 @@ export function DashboardNavbar() {
                     </Link>
                   );
                 })}
-              </div>
-              <div className="mt-6 border-t pt-4">
-                <Button className="w-full text-xs font-semibold">
-                  New Prompt
-                </Button>
               </div>
             </SheetContent>
           </Sheet>
