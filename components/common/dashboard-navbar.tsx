@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react"
 import {
   Menu,
   Sparkles,
@@ -46,6 +47,7 @@ const navItems: NavItem[] = [
 
 export function DashboardNavbar() {
   const pathname = usePathname();
+  const { data: session, status } = useSession()
 
   return (
     <header className="border-b bg-white">
@@ -78,7 +80,6 @@ export function DashboardNavbar() {
           })}
         </nav>
 
-        {/* Bagian profile */}
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -88,7 +89,7 @@ export function DashboardNavbar() {
                   <AvatarFallback>RA</AvatarFallback>
                 </Avatar>
                 <span className="hidden text-xs font-medium sm:inline">
-                  restu.aliza
+                  {session?.user?.email}
                 </span>
               </button>
             </DropdownMenuTrigger>
@@ -96,7 +97,7 @@ export function DashboardNavbar() {
               <DropdownMenuLabel className="text-xs">
                 Signed in as
                 <div className="truncate text-[11px] font-normal text-slate-500">
-                  restu@example.com
+                  {session?.user?.email}
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -109,7 +110,7 @@ export function DashboardNavbar() {
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-xs text-red-600">
+              <DropdownMenuItem className="text-xs text-red-600" onClick={() => signOut({ callbackUrl: "/" })}>
                 <LogOut className="mr-2 h-3.5 w-3.5" />
                 Log out
               </DropdownMenuItem>

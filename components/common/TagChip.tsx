@@ -1,4 +1,4 @@
-import { TagChipProps, TagColorKey } from '@/types/tag';
+import type { TagChipProps, TagColorKey } from '@/types/tag';
 
 export default function TagChip({ label, colorKey }: TagChipProps) {
     const tagColors: Record<TagColorKey, string> = {

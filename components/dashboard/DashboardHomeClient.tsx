@@ -285,8 +285,6 @@ export function DashboardHomeClient() {
   );
 }
 
-/* ------- small components ------- */
-
 function FilterButton({
   label,
   active,

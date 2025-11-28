@@ -8,16 +8,12 @@ const collectionSchema = new Schema(
       required: true,
       index: true,
     },
-    name: {
+    title: {
       type: String,
       required: true,
       trim: true,
     },
     description: {
-      type: String,
-      trim: true,
-    },
-    icon: {
       type: String,
       trim: true,
     },
