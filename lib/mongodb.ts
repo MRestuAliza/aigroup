@@ -35,7 +35,6 @@ export async function connectDB() {
     if (cached.conn) return cached.conn;
 
     if (!cached.promise) {
-        console.log("[MongoDB] Using URI:", MONGODB_URI);
         cached.promise = mongoose
             .connect(MONGODB_URI!, {
                 autoIndex: !isProd,

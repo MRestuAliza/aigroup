@@ -6,7 +6,7 @@ export type PromptFormInput = z.input<typeof promptSchema>;
 export type PromptFormOutput = z.output<typeof promptSchema>;
 
 export interface Prompt {
-  id?: string;
+  id: string;
   title: string;
   description: string;
   prompt: string;
@@ -18,4 +18,5 @@ export interface Prompt {
 export interface PromptCardProps {
   data: Prompt;
   onEdit: (data: Prompt) => void;
+  onDelete: () => void;
 }
