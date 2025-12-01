@@ -20,7 +20,7 @@ interface Props {
 export default function PromptFormDialog({ open, onOpenChange, initialData, onSuccess }: Props) {
   const isEditMode = !!initialData;
   const { form, onSubmit, isSubmitting } = usePromptForm(onSuccess, initialData);
-  const { collections, loading, searchParams, setSearchParams, refetch } = useCollection();
+  const { collections, loading } = useCollection();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -65,7 +65,7 @@ export default function PromptFormDialog({ open, onOpenChange, initialData, onSu
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Collection</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder={loading ? "Loading..." : "Select Collection"} />

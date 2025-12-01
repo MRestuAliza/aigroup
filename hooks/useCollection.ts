@@ -2,14 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { toast } from "sonner";
 import type { Collection } from "@/types/collection";
 
-interface SearchParams {
+interface FilterParams {
     search?: string;
+    sort?: string;
 }
 
-export function useCollection(initialData: Collection[] = [], initialSearchParams: SearchParams = {}) {
+export function useCollection(initialData: Collection[] = [], initialSearchParams: FilterParams = {}) {
     const [collections, setCollections] = useState(initialData);
     const [loading, setLoading] = useState(true);
-    const [searchParams, setSearchParams] = useState<SearchParams>(initialSearchParams);
+    const [searchParams, setSearchParams] = useState<FilterParams>(initialSearchParams);
+    const [filtersCollection, setFiltersCollection] = useState<FilterParams>({ sort: "created-desc" });
 
     const fetchCollections = useCallback(async () => {
         try {
@@ -17,7 +19,7 @@ export function useCollection(initialData: Collection[] = [], initialSearchParam
 
             const params = new URLSearchParams();
             if (searchParams.search) params.append("search", searchParams.search);
-
+            if (filtersCollection.sort) params.append("sort", filtersCollection.sort);
             const res = await fetch(`/api/collections?${params.toString()}`);
             const json = await res.json();
 
@@ -45,7 +47,7 @@ export function useCollection(initialData: Collection[] = [], initialSearchParam
         } finally {
             setLoading(false);
         }
-    }, [searchParams]);
+    }, [searchParams, filtersCollection]);
 
     const handleDeleteCollections = async (id: string) => {
         try {
@@ -76,6 +78,8 @@ export function useCollection(initialData: Collection[] = [], initialSearchParam
     return {
         collections,
         loading,
+        filtersCollection,
+        setFiltersCollection,
         searchParams,
         setSearchParams,
         refetch: fetchCollections,
