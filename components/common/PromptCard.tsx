@@ -1,9 +1,9 @@
 import { Card } from "@/components/ui/card";
 import TagChip from './TagChip';
-import { PromptCardProps } from '@/types/prompt';
+import type { Prompt } from '@/types/prompt';
 import { Copy, Pencil, Trash2 } from "lucide-react";
 
-export default function PromptCard({ title, description, tags }: PromptCardProps) {
+export default function PromptCard({ title, description, tags }: Prompt) {
   return (
     <div>
       <Card className="w-full p-5 flex flex-col md:flex-row md:items-start md:justify-between gap-4 border border-border shadow-sm hover:border-amber-300 transition">

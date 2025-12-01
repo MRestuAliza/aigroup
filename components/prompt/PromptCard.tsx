@@ -61,7 +61,7 @@ export default function PromptCard({ data, onEdit, onDelete }: PromptCardProps) 
         <button type="button" className="p-2 hover:bg-amber-100 hover:text-amber-600 text-amber-600 rounded-full transition" onClick={onCopy}>
           {isCopied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
         </button>
-        <button className="p-2 hover:bg-amber-200 hover:text-[#101827] text-[#fab900] rounded-full transition" onClick={() => onEdit(data)}><Pencil className="w-4 h-4" /></button>
+        <button className="p-2 hover:bg-amber-100 hover:text-[#101827] text-[#fab900] rounded-full transition" onClick={() => onEdit(data)}><Pencil className="w-4 h-4" /></button>
         <AlertDeleteDialog
           type="Prompt"
           title={data.title}
