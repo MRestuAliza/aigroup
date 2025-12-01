@@ -20,6 +20,12 @@ export async function GET(req: Request) {
         await connectDB();
         const { searchParams } = new URL(req.url);
         const searchQuery = searchParams.get("search");
+        const sortParam = searchParams.get("sort") || "created-desc";
+
+        let sort: any = { createdAt: -1 };
+        if (sortParam === "created-asc") sort = { createdAt: 1 };
+        if (sortParam === "title-asc") sort = { title: 1 };
+        if (sortParam === "title-desc") sort = { title: -1 };
 
         let matchFilter: any = {
             userId: new Types.ObjectId(session.user.id)
@@ -28,7 +34,7 @@ export async function GET(req: Request) {
 
         const collections = await CollectionModel.aggregate([
             { $match: matchFilter },
-            { $sort: { createdAt: -1 } },
+            { $sort: sort },
             {
                 $lookup: {
                     from: "prompts",
