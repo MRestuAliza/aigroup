@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,7 +6,7 @@ import type { CollectionFormInput, CollectionFormOutput, Collection } from '@/ty
 import { collectionSchema } from "@/lib/schemas";
 import { toast } from "sonner";
 
-export function useCollectionForm(onSuccess: (newCollection: Collection) => void) {
+export function useCollectionForm(onSuccess: (newCollection: Collection) => void, initialData?: Collection | null, onOpenChange?: (open: boolean) => void) {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
 
@@ -19,28 +19,49 @@ export function useCollectionForm(onSuccess: (newCollection: Collection) => void
         },
     });
 
-    const handleOpenClick = () => {
+    useEffect(() => {
+        if (initialData) {
+            form.reset({
+                title: initialData.title,
+                description: initialData.description,
+            });
+        } else {
+            form.reset({
+                title: "",
+                description: "",
+            });
+        }
+    }, [initialData, form]);
+
+    const handleSubmitCollection = async (data: CollectionFormOutput) => {
         if (!session || !session.user) {
             toast.error("Please login first.");
             return;
         }
-        const userPlan = session?.user?.plan;
-        if (userPlan !== "lifetime") {
-            toast.error("Only lifetime users can create prompts. Please upgrade.");
-            return;
-        }
-        setOpen(true);
-    }
-
-    const handleSubmitCollection = async (data: CollectionFormOutput) => {
         try {
-            const response = await fetch("/api/collections", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            })
+            const userPlan = session?.user?.plan;
+            if (userPlan !== "lifetime") {
+                toast.error("Only lifetime users can create collections. Please upgrade.");
+                return;
+            }
+
+            let response;
+            if (initialData) {
+                response = await fetch(`/api/collections/${initialData.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+            } else {
+                response = await fetch("/api/collections", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+            }
+
             const resultJson = await response.json();
             if (!response.ok) {
                 if (response.status === 401) throw new Error("You must be logged in to create a collection.");
@@ -65,9 +86,7 @@ export function useCollectionForm(onSuccess: (newCollection: Collection) => void
         form,
         open,
         setOpen,
-        handleOpenClick,
         onSubmit: form.handleSubmit(handleSubmitCollection),
         isSubmitting: form.formState.isSubmitting,
-
     }
 }

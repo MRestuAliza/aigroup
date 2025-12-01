@@ -1,17 +1,16 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import TagChip from "@/components/common/TagChip";
 import { Collection } from "@/types/collection";
 import { AlertDeleteDialog } from "@/components/common/DeleteDialog";
 
-interface Props {
+interface CollectionProps {
     data: Collection;
     onDelete: () => void;
+    onEdit: (data: Collection) => void;
 }
 
-export default function CollectionCard({ data, onDelete }: Props) {
+export default function CollectionCard({ data, onEdit, onDelete }: CollectionProps) {
     return (
         <Card className="border border-amber-100 hover:border-amber-300 transition-shadow shadow-sm h-full flex flex-col">
             <CardHeader className="flex justify-between flex-row items-start space-y-0 pb-2">
@@ -66,7 +65,7 @@ export default function CollectionCard({ data, onDelete }: Props) {
                 </button>
 
                 <div className="flex gap-3 text-muted-foreground">
-                    <button className="hover:text-amber-500 transition-colors">Rename</button>
+                    <button className="hover:text-amber-500 transition-colors" onClick={() => onEdit(data)}>Rename</button>
                     <AlertDeleteDialog
                         type="Collection"
                         title={data.title}

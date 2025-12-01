@@ -9,25 +9,26 @@ import type { Collection } from "@/types/collection";
 import { useCollectionForm } from "@/hooks/useCollectionForm";
 
 interface Props {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    initialData?: Collection | null;
     onSuccess: (newCollection: Collection) => void;
 }
 
-export default function ({ onSuccess }: Props) {
-    const { form, open, setOpen, handleOpenClick, onSubmit, isSubmitting } = useCollectionForm(onSuccess);
+export default function CollectionDialog({ open, onOpenChange, initialData, onSuccess }: Props) {
+    const isEditMode = !!initialData;
+    const { form, onSubmit, isSubmitting } = useCollectionForm(onSuccess, initialData);
 
     return (
         <>
-            <Button onClick={handleOpenClick} className="bg-amber-500 hover:bg-amber-600 text-white font-semibold gap-2">
-                <Plus className="w-4 h-4" /> Create Collection
-            </Button>
-            <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogContent className="sm:max-w-[520px]">
                     <DialogHeader>
                         <DialogTitle className="text-xl font-bold text-[#404040]">
-                            Create Collection
+                            {isEditMode ? "Edit Collection" : "Create New Collection"}
                         </DialogTitle>
                         <DialogDescription className="text-sm text-muted-foreground">
-                            Create a new collection.
+                            {isEditMode ? "Edit your collection." : "Create a new collection."}
                         </DialogDescription>
                     </DialogHeader>
 
@@ -59,9 +60,9 @@ export default function ({ onSuccess }: Props) {
                             />
 
                             <DialogFooter>
-                                <Button variant="outline" type="button" onClick={() => setOpen(false)}>Cancel</Button>
+                                <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>Cancel</Button>
                                 <Button type="submit" className="bg-amber-500 hover:bg-amber-600 text-white" disabled={isSubmitting}>
-                                    {isSubmitting ? "Saving..." : "Save Collection"}
+                                    {isSubmitting ? "Saving..." : (isEditMode ? "Update Collection" : "Create Collection")}
                                 </Button>
                             </DialogFooter>
                         </form>
