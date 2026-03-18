@@ -72,7 +72,7 @@ export const authOptions: NextAuthOptions = {
     },
 
 
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user, account, trigger, session }) {
       if (user) {
         await connectDB();
         const dbUser = await User.findOne({ email: user.email });
@@ -81,6 +81,10 @@ export const authOptions: NextAuthOptions = {
           token.id = dbUser._id.toString();
           token.plan = dbUser.plan || "free";
         }
+      }
+
+      if (account) {
+        token.provider = account.provider;
       }
 
       if (trigger === "update" && session?.plan) {
@@ -93,6 +97,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.plan = token.plan as string;
+        session.user.provider = token.provider as string;
         session.user.email = token.email;
         session.user.name = token.name;
         session.user.image = token.picture;

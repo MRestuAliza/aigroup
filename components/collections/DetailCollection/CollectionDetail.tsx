@@ -6,27 +6,25 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import PromptFormDialog from "./PromptFormDialog";
-import PromptCard from "./PromptCard";
+import PromptFormDialog from "@/components/prompt/PromptFormDialog";
+import PromptCard from "@/components/prompt/PromptCard";
 import { usePrompts } from "@/hooks/usePrompts";
 import type { Prompt } from "@/types/prompt";
-import { useTags } from "@/hooks/useTags";
-import { useCollection } from "@/hooks/useCollection";
+import { useCollectionDetail } from "@/hooks/useCollectionDetail";
+import { useRouter } from 'next/navigation';
 
 interface Props {
-  initialData: Prompt[];
+  collectionId: string;
 }
 
-export default function PromptManager() {
-  const { prompts, loading, filters, setLoading, setFilters, refetch, handleDeletePrompt } = usePrompts();
-  const { collections, loading: collectionsLoading } = useCollection();
+export default function CollectionDetail({ collectionId }: Props) {
+  const { handleDeletePrompt } = usePrompts();
+  const { collection, prompts, loading, filters, setFilters, refetch } = useCollectionDetail(collectionId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
-  const { tags, loading: tagsLoading, error, refetch: refetchTags } = useTags();
-  const isFilterActive = filters.search !== "" || filters.collectionId !== "all-collections" || filters.tag !== "all-tags";
+  const router = useRouter();
 
   const handleFilterChange = (key: string, value: string) => {
-    setLoading(true); 
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -44,60 +42,37 @@ export default function PromptManager() {
     refetch();
     setIsDialogOpen(false);
   };
-
-  const handleResetFilters = () => {
-    setLoading(true);
-    setFilters({
-      search: "",
-      collectionId: "all-collections",
-      tag: "all-tags",
-      sort: "created-desc"
-    });
+  const handleBack = () => {
+    router.push('/collections');
   }
 
   return (
     <>
+      <div className="mb-8">
+        <Button onClick={handleBack} className="bg-amber-500 mb-2 hover:bg-amber-600 text-white font-semibold gap-2">
+          ← Back
+        </Button>
+        <h1 className="text-3xl font-bold">{collection?.title}</h1>
+        <p className="text-base text-muted-foreground">{collection?.description}</p>
+      </div>
       <Card className="p-4 flex flex-col border-border lg:flex-row border gap-3 mb-6">
-        <Input
-          placeholder="Search prompts..."
-          className="w-full"
-          value={filters.search}
-          onChange={(e) => handleFilterChange("search", e.target.value)}
-        />
-
+        <Input placeholder="Search prompts..." className="w-full" value={filters.search} onChange={(e) => handleFilterChange("search", e.target.value)} />
         <div className="flex flex-col w-full gap-3 justify-end md:flex-row">
-          <Select value={filters.collectionId} onValueChange={(val) => handleFilterChange("collectionId", val)}>
-            <SelectTrigger className="w-full md:w-[180px]">
-              <SelectValue placeholder="Collections: All" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all-collections">Collections: All</SelectItem>
-              {collectionsLoading ? (
-                <SelectItem value="loading-collections" disabled>Loading collections...</SelectItem>
-              ) : (
-                collections.map((collection) => (
-                  <SelectItem key={collection.id} value={collection.id}>
-                    {collection.title}
-                  </SelectItem>
-                ))
-              )}
-            </SelectContent>
-          </Select>
           <Select value={filters.tag} onValueChange={(val) => handleFilterChange("tag", val)}>
             <SelectTrigger className="w-full md:w-[150px]">
               <SelectValue placeholder="Tags: All" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all-tags">Tags: All</SelectItem>
-              {tagsLoading ? (
-                <SelectItem value="loading" disabled>Loading tags...</SelectItem>
+              {/* {tagsLoading ? (
+                <SelectItem value="" disabled>Loading tags...</SelectItem>
               ) : (
                 tags.map((tag) => (
                   <SelectItem key={tag.label} value={tag.label}>
-                    {tag.label}
+                    {tag.label} ({tag.count})
                   </SelectItem>
                 ))
-              )}
+              )} */}
             </SelectContent>
           </Select>
           <Select value={filters.sort} onValueChange={(val) => handleFilterChange("sort", val)}>
@@ -135,24 +110,8 @@ export default function PromptManager() {
             <PromptCard key={prompt.id} data={prompt} onEdit={handleEdit} onDelete={() => handleDeletePrompt(prompt.id)} />
           ))
         ) : (
-          <div className="text-center py-12 border-2 border-dashed rounded-lg text-muted-foreground space-y-3">
-            {isFilterActive ? (
-              <div>
-                <p className="font-semibold text-lg">🤔 No prompts found matching your search or filters.</p>
-                <p className="text-sm">Try resetting your filters to see all available prompts.</p>
-                <Button variant="outline" onClick={handleResetFilters} className="mt-3">
-                  Reset Filters
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <p className="font-semibold text-lg text-foreground">👋 Welcome! It looks a little empty here.</p>
-                <p className="text-sm">Get started by creating your very first prompt.</p>
-                <Button onClick={handleOpenCreate} className="bg-amber-500 hover:bg-amber-600 text-white font-semibold gap-2 mt-4">
-                  <Plus className="w-4 h-4" /> Create First Prompt
-                </Button>
-              </div>
-            )}
+          <div className="text-center py-12 border-2 border-dashed rounded-lg text-muted-foreground">
+            <p>No prompts found matching your search.</p>
           </div>
         )}
       </section>

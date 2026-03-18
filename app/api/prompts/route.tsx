@@ -24,8 +24,8 @@ export async function GET(req: NextRequest) {
     const sortParam = searchParams.get("sort") || "created-desc";
     const query: any = { userId: session.user.id };
 
-    if (tag && tag !== "all") query["tags.label"] = tag;
-    if (collectionId && collectionId !== "all") query.collectionId = collectionId;
+    if (tag && tag !== "all-tags") query["tags.label"] = tag;
+    if (collectionId && collectionId !== "all-collections") query.collectionId = collectionId;
 
     if (search) {
         const regex = new RegExp(search, "i");
@@ -61,16 +61,6 @@ export async function POST(req: Request) {
                     status: "fail",
                     message: "Unauthorized"
                 }, { status: 401 });
-        }
-
-        if (session?.user?.plan !== "lifetime") {
-            return NextResponse.json(
-                {
-                    status: "fail",
-                    data: {
-                        plan: "Only lifetime users can create prompts."
-                    }
-                }, { status: 403 });
         }
 
         await connectDB();

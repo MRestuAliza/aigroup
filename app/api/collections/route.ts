@@ -91,16 +91,6 @@ export async function POST(req: Request) {
                 }, { status: 401 });
         }
 
-        if (session?.user?.plan !== "lifetime") {
-            return NextResponse.json(
-                {
-                    status: "fail",
-                    data: {
-                        plan: "Only lifetime users can create prompts."
-                    }
-                }, { status: 403 });
-        }
-
         await connectDB();
 
         const body = await req.json();

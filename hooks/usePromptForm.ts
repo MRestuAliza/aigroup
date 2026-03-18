@@ -47,14 +47,7 @@ export function usePromptForm(onSuccess: (newPrompt: Prompt) => void, initialDat
         }
 
         try {
-            const userPlan = session?.user?.plan;
             const payload = { ...data };
-            if (userPlan !== "lifetime") {
-                toast.error("Only lifetime users can create prompts. Please upgrade.");
-                return;
-            }
-
-
             if (payload.collectionId === "uncategorized" || payload.collectionId === "") {
                 payload.collectionId = null;
             }

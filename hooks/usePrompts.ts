@@ -88,6 +88,7 @@ export function usePrompts(initialData: Prompt[] = [], initialFilters?: FilterPa
   return {
     prompts,
     loading,
+    setLoading,
     filters,
     setFilters,
     refetch: fetchPrompts,

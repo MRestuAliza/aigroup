@@ -72,7 +72,7 @@ export default function PromptFormDialog({ open, onOpenChange, initialData, onSu
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="uncategorized">Delete From Collection</SelectItem>
+                        <SelectItem value="uncategorized" className="text-red-500">Delete From Collection</SelectItem>
                         {collections.map((collection) => (
                           <SelectItem key={collection.id} value={collection.id}>
                             {collection.title}

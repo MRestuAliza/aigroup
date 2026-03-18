@@ -2,37 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react"
-import {
-  Menu,
-  Sparkles,
-  LogOut,
-  Settings,
-  User as UserIcon,
-} from "lucide-react";
-
+import { Menu, Sparkles, LogOut, Settings, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -47,6 +23,7 @@ const navItems: NavItem[] = [
 
 export function DashboardNavbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session, status } = useSession()
 
   return (
@@ -61,7 +38,6 @@ export function DashboardNavbar() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
         <nav className="ml-8 hidden items-center gap-4 text-sm text-slate-600 md:flex">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -83,13 +59,14 @@ export function DashboardNavbar() {
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 rounded-full border px-2 py-1 text-xs hover:bg-slate-50">
-                <Avatar className="h-7 w-7">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>RA</AvatarFallback>
-                </Avatar>
-                <span className="hidden text-xs font-medium sm:inline">
-                  {session?.user?.email}
+              <button className="flex items-center gap-2 rounded-full border border-amber-200 px-3 py-1.5 text-xs hover:bg-amber-50 transition-colors">
+                <div className="bg-gradient-to-br from-amber-400 to-orange-500 rounded-full h-7 w-7 flex items-center justify-center">
+                  <span className="text-xs font-bold text-white drop-shadow-md">
+                    {session?.user?.name ? session.user.name.split(' ').slice(0, 2).map(n => n.charAt(0).toUpperCase()).join('') : 'U'}
+                  </span>
+                </div>
+                <span className="hidden text-xs font-semibold sm:inline text-slate-700">
+                  {session?.user?.name || 'User'}
                 </span>
               </button>
             </DropdownMenuTrigger>
@@ -100,16 +77,6 @@ export function DashboardNavbar() {
                   {session?.user?.email}
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-xs">
-                <UserIcon className="mr-2 h-3.5 w-3.5" />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-xs">
-                <Settings className="mr-2 h-3.5 w-3.5" />
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
               <DropdownMenuItem className="text-xs text-red-600" onClick={() => signOut({ callbackUrl: "/" })}>
                 <LogOut className="mr-2 h-3.5 w-3.5" />
                 Log out
@@ -117,7 +84,6 @@ export function DashboardNavbar() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Mobile: menu */}
           <Sheet>
             <SheetTrigger asChild>
               <Button
